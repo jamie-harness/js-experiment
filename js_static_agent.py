@@ -21,11 +21,13 @@ lock = threading.Lock()
 
 
 def DFS(path_to_file):
-    global visited
+
+    global visited  
     global parents
     global lock
     global glob_cache
 
+    path_to_file = os.path.abspath(path_to_file)
     # print(path_to_file)
     # print(thread_counter)
     # result = []
