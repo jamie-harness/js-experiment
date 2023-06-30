@@ -72,7 +72,7 @@ def DFS(path_to_file):
                         elif from_start:
                             childFiles = findFileName(token, path_to_file)
                             # visited[path_to_file].extend(childFiles)
-                            if thread_counter < 32:
+                            if thread_counter < 0:
                                 threads = [None] * len(childFiles)
                                 for i, childFile in enumerate(childFiles):
                                     with lock:
