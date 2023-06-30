@@ -19,14 +19,12 @@ cwd = os.getcwd()
 
 lock = threading.Lock()
 
-thread_counter = 0
 
 def DFS(path_to_file):
     global visited
     global parents
     global lock
     global glob_cache
-    global thread_counter
 
     # print(path_to_file)
     # print(thread_counter)
@@ -72,7 +70,7 @@ def DFS(path_to_file):
                         elif from_start:
                             childFiles = findFileName(token, path_to_file)
                             # visited[path_to_file].extend(childFiles)
-                            if thread_counter < 8:
+                            if threading.active_count < 8:
                                 threads = [None] * len(childFiles)
                                 for i, childFile in enumerate(childFiles):
                                     with lock:
@@ -83,11 +81,8 @@ def DFS(path_to_file):
                                             parents[childFile] = [path_to_file]
                                     threads[i] = threading.Thread(target=DFS, args=([childFile]))
                                     threads[i].start()
-                                    with lock:
-                                        thread_counter = thread_counter + 1
                                 for i in range(len(childFiles)):
                                     threads[i].join()
-                                    thread_counter = thread_counter - 1
                             else:
                                 for childFile in childFiles:
                                     with lock:
