@@ -72,7 +72,7 @@ def DFS(path_to_file):
                         elif from_start:
                             childFiles = findFileName(token, path_to_file)
                             # visited[path_to_file].extend(childFiles)
-                            if thread_counter < 64:
+                            if thread_counter < 8:
                                 threads = [None] * len(childFiles)
                                 for i, childFile in enumerate(childFiles):
                                     with lock:
@@ -81,9 +81,9 @@ def DFS(path_to_file):
                                                 parents[childFile].append(path_to_file)
                                         else:
                                             parents[childFile] = [path_to_file]
-                                        threads[i] = threading.Thread(target=DFS, args=([childFile]))
+                                    threads[i] = threading.Thread(target=DFS, args=([childFile]))
+                                    threads[i].start()
                                     with lock:
-                                        threads[i].start()
                                         thread_counter = thread_counter + 1
                                 for i in range(len(childFiles)):
                                     threads[i].join()
@@ -130,6 +130,7 @@ def DFS(path_to_file):
 
 
 def findFileName(importStr, pwd):
+    global glob_cache
     importStr = importStr.strip("'")
     pwd = os.path.dirname(os.path.realpath(pwd))
     flist = []
