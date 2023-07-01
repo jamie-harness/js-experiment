@@ -219,8 +219,8 @@ while i < len(tests):
 # print(parents)
 
 res = []
-# cmd_result = subprocess.check_output(["git diff --name-status --diff-filter=MADR HEAD@{1} HEAD -1"], shell=True, text=True)
-cmd_result = subprocess.check_output(["git diff --name-status"], shell=True, text=True)
+cmd_result = subprocess.check_output(["git diff --name-status --diff-filter=MADR HEAD@{1} HEAD -1"], shell=True, text=True)
+# cmd_result = subprocess.check_output(["git diff --name-status"], shell=True, text=True)
 for l in cmd_result.splitlines():
     t = l.split()
     if len(t) == 0:
