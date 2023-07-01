@@ -15,11 +15,13 @@ visited = {}
 
 parents = {}
 
+find_test_visited = {}
+
 cwd = os.getcwd()
 
 lock = threading.Lock()
 
-thread_max = 16
+thread_max = 1
 
 
 def DFS(path_to_file):
@@ -37,8 +39,8 @@ def DFS(path_to_file):
         if path_to_file in visited or path_to_file == "":
             return
         visited[path_to_file] = []
-    # print(path_to_file)
-    # print(threading.active_count())
+    print(path_to_file)
+    print(threading.active_count())
     with open(path_to_file, "r") as file:
         bracketFrom = ''
         commentStart = False
@@ -128,6 +130,20 @@ def DFS(path_to_file):
             else:
                 continue
     # return result
+
+def recursive_find_test(path_to_file):
+    if path_to_file in find_test_visited:
+        return []
+    find_test_visited[path_to_file] = []
+    if path_to_file not in parents:
+        return []
+    
+    selection = []
+    children = parents[path_to_file]
+    selection.extend(children)
+    for child in children:
+        selection.extend(recursive_find_test(child))
+    return selection
 
 
 def findFileName(importStr, pwd):
@@ -238,9 +254,12 @@ for l in cmd_result.splitlines():
 selection = []
 for change in res:
     change = os.path.abspath(change)
-    if change in parents:
-        selection.extend(parents.get(change))
+    results = recursive_find_test(change)
+    print(f"{change}: {results}")
+    for result in results:
+        if result.endswith("test.tsx") or result.endswith("test.ts"):
+            selection.append(result)
 
-print(selection)
-print(time.time()-startts)
+print(f"Test Selection: {selection}")
+print(f"Total time: {time.time()-startts}")
         
