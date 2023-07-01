@@ -19,7 +19,7 @@ cwd = os.getcwd()
 
 lock = threading.Lock()
 
-thread_max = 8
+thread_max = 20
 
 
 def DFS(path_to_file):
@@ -31,7 +31,7 @@ def DFS(path_to_file):
 
     path_to_file = os.path.abspath(path_to_file)
     print(path_to_file)
-    # print(threading.active_count())
+    print(threading.active_count())
     # result = []
     if path_to_file in visited or path_to_file == "":
         return
@@ -74,7 +74,7 @@ def DFS(path_to_file):
                         elif from_start:
                             childFiles = findFileName(token, path_to_file)
                             # visited[path_to_file].extend(childFiles)
-                            if threading.active_count() < thread_max:
+                            if threading.active_count() < thread_max * 2:
                                 threads = [None] * len(childFiles)
                                 for i, childFile in enumerate(childFiles):
                                     with lock:
@@ -204,12 +204,14 @@ while i < len(tests):
     j = 0
     root_threads = [None] * thread_max
     while j < thread_max:
-        root_threads[j] = threading.Thread(target=DFS, args=([tests[i * thread_max + j]]))
-        root_threads[j].start()
+        if (i * thread_max + j < len(tests)):
+            root_threads[j] = threading.Thread(target=DFS, args=([tests[i * thread_max + j]]))
+            root_threads[j].start()
         j =  j + 1
     j = 0
     while j < thread_max:
-        root_threads[j].join()
+        if (i * thread_max + j < len(tests)):
+            root_threads[j].join()
         j =  j + 1
     i = i + 1
 
