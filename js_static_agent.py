@@ -19,7 +19,7 @@ cwd = os.getcwd()
 
 lock = threading.Lock()
 
-thread_max = 10
+thread_max = 8
 
 
 def DFS(path_to_file):
@@ -31,7 +31,7 @@ def DFS(path_to_file):
 
     path_to_file = os.path.abspath(path_to_file)
     print(path_to_file)
-    print(threading.active_count())
+    # print(threading.active_count())
     # result = []
     if path_to_file in visited or path_to_file == "":
         return
@@ -130,8 +130,8 @@ def DFS(path_to_file):
 
 def findFileName(importStr, pwd):
     global glob_cache
-    print("//")
-    print(importStr)
+    # print("//")
+    # print(importStr)
     importStr = importStr.strip("'")
     pwd = os.path.dirname(os.path.realpath(pwd))
     flist = []
@@ -209,7 +209,7 @@ while i < len(tests):
         j =  j + 1
     j = 0
     while j < thread_max:
-        threroot_threads[j].join()
+        root_threads[j].join()
         j =  j + 1
     i = i + 1
 
