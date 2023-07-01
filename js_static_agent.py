@@ -4,7 +4,7 @@ import subprocess
 import threading
 import time
 
-globs = ["**/*.test.tsx"]
+globs = ["**/*.test.tsx", "**/*.test.ts"]
 # globs = ["/src/modules/75-ce/utils/__test__/utils.test.tsx"]
 exclude_list = ["react", "moment"]
 glob_cache = {}
