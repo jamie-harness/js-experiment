@@ -30,10 +30,12 @@ def DFS(path_to_file):
     global glob_cache
 
     path_to_file = os.path.abspath(path_to_file)
-    # print(path_to_file)
-    # print(threading.active_count())
+    print(path_to_file)
+    print(threading.active_count())
     # result = []
     if path_to_file in visited or path_to_file == "":
+        return
+    if not (path_to_file.endswith(".tsx") or path_to_file.endswith(".ts") or path_to_file.endswith(".js")):
         return
     with lock:
         visited[path_to_file] = []
@@ -137,12 +139,7 @@ def findFileName(importStr, pwd):
     flist = []
     if importStr.startswith("@"):
         path = importStr.strip("@")
-        flist = glob.glob("**" + path + "/*.tsx", recursive=True)
-        flist.extend(glob.glob("**" + path + ".ts", recursive=True))
-        flist.extend(glob.glob("**" + path + "/*.ts", recursive=True))
-        flist.extend(glob.glob("**" + path + ".tsx", recursive=True))
-        flist.extend(glob.glob("**" + path + "/*.js", recursive=True))
-        flist.extend(glob.glob("**" + path + ".js", recursive=True))
+        flist = glob.glob("**" + path + "*", recursive=True)
         return flist
     if importStr == "": 
         return []
@@ -165,23 +162,13 @@ def findFileName(importStr, pwd):
     if abs_path:
         if importStr not in exclude_list:
             if importStr not in glob_cache:
-                flist = glob.glob("**/" + importStr + "/*.tsx", recursive=True, root_dir=cwd)
-                flist.extend(glob.glob("**/" + importStr + ".tsx", recursive=True, root_dir=cwd))
-                flist.extend(glob.glob("**/" + importStr + "/*.ts", recursive=True, root_dir=cwd))
-                flist.extend(glob.glob("**/" + importStr + ".ts", recursive=True, root_dir=cwd))
-                flist.extend(glob.glob("**/" + importStr + "/*.js", recursive=True, root_dir=cwd))
-                flist.extend(glob.glob("**/" + importStr + ".js", recursive=True, root_dir=cwd))
+                flist = glob.glob("**/" + importStr + "*", recursive=True, root_dir=cwd)
                 with lock:
                     glob_cache[importStr] = flist
             else:
                 flist = glob_cache[importStr]
     else:
-        flist = glob.glob("**" + element + "/*.tsx", recursive=True, root_dir=pwd)
-        flist.extend(glob.glob("**" + element + ".tsx", recursive=True, root_dir=pwd))
-        flist.extend(glob.glob("**" + element + "/*.ts", recursive=True, root_dir=pwd))
-        flist.extend(glob.glob("**" + element + ".ts", recursive=True, root_dir=pwd))
-        flist.extend(glob.glob("**" + element + "/*.js", recursive=True, root_dir=pwd))
-        flist.extend(glob.glob("**" + element + ".js", recursive=True, root_dir=pwd))
+        flist = glob.glob("**" + element + "*", recursive=True, root_dir=pwd)
     final_list = []
     for file in flist:
         if "node_module" not in file:
