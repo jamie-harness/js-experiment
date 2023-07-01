@@ -19,6 +19,8 @@ cwd = os.getcwd()
 
 lock = threading.Lock()
 
+thread_max = 10
+
 
 def DFS(path_to_file):
 
@@ -28,8 +30,8 @@ def DFS(path_to_file):
     global glob_cache
 
     path_to_file = os.path.abspath(path_to_file)
-    # print(path_to_file)
-    # print(thread_counter)
+    print(path_to_file)
+    print(threading.active_count())
     # result = []
     if path_to_file in visited or path_to_file == "":
         return
@@ -72,7 +74,7 @@ def DFS(path_to_file):
                         elif from_start:
                             childFiles = findFileName(token, path_to_file)
                             # visited[path_to_file].extend(childFiles)
-                            if threading.active_count() < 8:
+                            if threading.active_count() < thread_max:
                                 threads = [None] * len(childFiles)
                                 for i, childFile in enumerate(childFiles):
                                     with lock:
@@ -128,6 +130,8 @@ def DFS(path_to_file):
 
 def findFileName(importStr, pwd):
     global glob_cache
+    print("//")
+    print(importStr)
     importStr = importStr.strip("'")
     pwd = os.path.dirname(os.path.realpath(pwd))
     flist = []
@@ -193,13 +197,24 @@ startts = time.time()
 for g in globs:
     tests.extend(glob.glob(g, recursive=True))
 
-root_threads = [None] * len(tests)
-for i, path_to_file in enumerate(tests):
-    if path_to_file not in visited:
-        root_threads[i] = threading.Thread(target=DFS, args=([path_to_file]))
-        root_threads[i].start()
-for i in range(len(tests)):
-    root_threads[i].join()
+print(len(tests))
+
+i = 0
+while i < len(tests):
+    j = 0
+    root_threads = [None] * thread_max
+    while j < thread_max:
+        root_threads[j] = threading.Thread(target=DFS, args=([tests[i * thread_max + j]]))
+        root_threads[j].start()
+        j =  j + 1
+    j = 0
+    while j < thread_max:
+        threroot_threads[j].join()
+        j =  j + 1
+    i = i + 1
+
+# for i in range(len(tests)):
+#     root_threads[i].join()
 
 # for k,v in visited.items():
 #     # final = []
