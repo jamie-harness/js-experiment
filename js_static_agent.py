@@ -235,6 +235,7 @@ while i < len(tests):
 # print(parents)
 
 res = []
+cmd_result = ""
 try:
     cmd_result = subprocess.check_output(["git diff --name-status --diff-filter=MADR HEAD@{1} HEAD -1"], shell=True, text=True)
 except subprocess.CalledProcessError as e:
