@@ -19,7 +19,7 @@ cwd = os.getcwd()
 
 lock = threading.Lock()
 
-thread_max = 100000
+thread_max = 16
 
 
 def DFS(path_to_file):
