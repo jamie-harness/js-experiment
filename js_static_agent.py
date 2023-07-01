@@ -21,7 +21,7 @@ cwd = os.getcwd()
 
 lock = threading.Lock()
 
-thread_max = 1
+thread_max = 16
 
 
 def DFS(path_to_file):
@@ -39,8 +39,8 @@ def DFS(path_to_file):
         if path_to_file in visited or path_to_file == "":
             return
         visited[path_to_file] = []
-    print(path_to_file)
-    print(threading.active_count())
+    # print(path_to_file)
+    # print(threading.active_count())
     with open(path_to_file, "r") as file:
         bracketFrom = ''
         commentStart = False
