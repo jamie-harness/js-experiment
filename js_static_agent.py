@@ -263,7 +263,7 @@ for change in res:
     for result in results:
         if result.endswith("test.tsx") or result.endswith("test.ts"):
             selection.append(result)
-
+selection = list(dict.fromkeys(selection))
 print(f"Test Selection: {selection}")
 print(f"Total time: {time.time()-startts}")
         
