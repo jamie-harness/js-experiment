@@ -19,7 +19,7 @@ cwd = os.getcwd()
 
 lock = threading.Lock()
 
-thread_max = 128
+thread_max = 100000
 
 
 def DFS(path_to_file):
@@ -30,15 +30,15 @@ def DFS(path_to_file):
     global glob_cache
 
     path_to_file = os.path.abspath(path_to_file)
-    # print(path_to_file)
-    # print(threading.active_count())
     # result = []
-    if path_to_file in visited or path_to_file == "":
-        return
     if not (path_to_file.endswith(".tsx") or path_to_file.endswith(".ts") or path_to_file.endswith(".js")):
         return
     with lock:
+        if path_to_file in visited or path_to_file == "":
+            return
         visited[path_to_file] = []
+    # print(path_to_file)
+    # print(threading.active_count())
     with open(path_to_file, "r") as file:
         bracketFrom = ''
         commentStart = False
