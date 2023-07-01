@@ -19,7 +19,7 @@ cwd = os.getcwd()
 
 lock = threading.Lock()
 
-thread_max = 64
+thread_max = 100000
 
 
 def DFS(path_to_file):
@@ -30,8 +30,8 @@ def DFS(path_to_file):
     global glob_cache
 
     path_to_file = os.path.abspath(path_to_file)
-    print(path_to_file)
-    print(threading.active_count())
+    # print(path_to_file)
+    # print(threading.active_count())
     # result = []
     if path_to_file in visited or path_to_file == "":
         return
