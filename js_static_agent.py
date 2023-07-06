@@ -266,4 +266,7 @@ for change in res:
 selection = list(dict.fromkeys(selection))
 print(f"Test Selection: {selection}")
 print(f"Total time: {time.time()-startts}")
+with open('js_static_result.txt', 'w') as f:
+    for line in selection:
+        f.write(f"{line}\n")
         
