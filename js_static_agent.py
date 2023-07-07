@@ -4,8 +4,8 @@ import subprocess
 import threading
 import time
 
-# globs = ["**/*.test.tsx", "**/*.test.ts"]
-globs = ["src/modules/33-auth-settings/components/Subscription/BillingInfo/__test__/PaymentMethod.test.tsx"]
+globs = ["**/*.test.tsx", "**/*.test.ts"]
+# globs = ["src/modules/33-auth-settings/components/Subscription/BillingInfo/__test__/PaymentMethod.test.tsx"]
 exclude_list = ["react", "moment"]
 glob_cache = {}
 # globs = ["pandas/testing.py"]
