@@ -4,8 +4,8 @@ import subprocess
 import threading
 import time
 
-globs = ["**/*.test.tsx", "**/*.test.ts"]
-# globs = ["src/modules/70-pipeline/components/HarnessCopilot/__tests__/HarnessCopilot.test.tsx"]
+# globs = ["**/*.test.tsx", "**/*.test.ts"]
+globs = ["src/modules/70-pipeline/components/HarnessCopilot/__tests__/HarnessCopilot.test.tsx"]
 exclude_list = ["react", "moment"]
 glob_cache = {}
 # globs = ["pandas/testing.py"]
@@ -25,7 +25,6 @@ thread_max = 16
 
 
 def DFS(path_to_file):
-
     global visited  
     global parents
     global lock
@@ -169,6 +168,7 @@ def findFileName(importStr, pwd):
 
 
     abs_path = False
+    full_name = False
     element = splits[-1]
     if count != 0:
         modified_count = count
@@ -191,6 +191,7 @@ def findFileName(importStr, pwd):
         full_dir = os.path.join(pwd, element)
         if (os.path.isdir(full_dir)):
             flist = glob.glob(full_dir + "/*")
+            full_name = True
         else:
             flist = glob.glob("**" + element + "*", recursive=True, root_dir=pwd)
     final_list = []
@@ -199,6 +200,8 @@ def findFileName(importStr, pwd):
             if "node_module" not in file:
                 if abs_path:
                     final_list.append(cwd + "/" + file)
+                elif full_name:
+                    final_list.append(file)
                 else: 
                     final_list.append(pwd + "/" + file)
 
@@ -263,7 +266,6 @@ for l in cmd_result.splitlines():
     elif t[0][0] == 'R':
         res.append(t[1])
         res.append(t[2])
-
 selection = []
 for change in res:
     change = os.path.abspath(change)
