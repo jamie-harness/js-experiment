@@ -173,14 +173,7 @@ def findFileName(importStr, pwd):
     if count != 0:
         modified_count = count
         element =  "/".join(splits[count:])
-        for dir_item in reversed(pwd.split("/")):
-            if not dir_item.startswith("__"):
-                modified_count = modified_count - 1
-            else:
-                count = count + 1
-            if modified_count <= 0:
-                break
-        pwd = "/".join(pwd.split("/")[0:-count])
+        pwd = "/".join(pwd.split("/")[0:- (count+1)])
     elif importStr.startswith("./"):
         importStr = importStr[2:]
     elif not importStr.startswith("/"):
@@ -195,7 +188,11 @@ def findFileName(importStr, pwd):
             else:
                 flist = glob_cache[importStr]
     else:
-        flist = glob.glob("**" + element + "*", recursive=True, root_dir=pwd)
+        full_dir = os.path.join(pwd, element)
+        if (os.path.isdir(full_dir)):
+            flist = glob.glob(full_dir + "/*")
+        else:
+            flist = glob.glob("**" + element + "*", recursive=True, root_dir=pwd)
     final_list = []
     for file in flist:
         if os.path.isfile(file):
