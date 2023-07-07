@@ -4,8 +4,8 @@ import subprocess
 import threading
 import time
 
-globs = ["**/*.test.tsx", "**/*.test.ts"]
-# globs = ["/src/modules/75-ce/utils/__test__/utils.test.tsx"]
+# globs = ["**/*.test.tsx", "**/*.test.ts"]
+globs = ["src/modules/33-auth-settings/components/Subscription/BillingInfo/__test__/PaymentMethod.test.tsx"]
 exclude_list = ["react", "moment"]
 glob_cache = {}
 # globs = ["pandas/testing.py"]
@@ -167,14 +167,15 @@ def findFileName(importStr, pwd):
 
 
     abs_path = False
-    
+    element = splits[-1]
     if count != 0:
         pwd = "/".join(pwd.split("/")[0:-count])
+        element =  "/".join(splits[count:])
     elif importStr.startswith("./"):
         importStr = importStr[2:]
     elif not importStr.startswith("/"):
         abs_path = True
-    element = splits[-1]
+
     if abs_path:
         if importStr not in exclude_list:
             if importStr not in glob_cache:
@@ -200,7 +201,7 @@ startts = time.time()
 for g in globs:
     tests.extend(glob.glob(g, recursive=True))
 
-print(len(tests))
+# print(len(tests))
 
 i = 0
 while i < len(tests):
@@ -269,4 +270,3 @@ print(f"Total time: {time.time()-startts}")
 with open('js_static_result.txt', 'w') as f:
     for line in selection:
         f.write(f"{line}\n")
-        
