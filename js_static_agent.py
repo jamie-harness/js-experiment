@@ -33,6 +33,8 @@ def DFS(path_to_file):
 
     path_to_file = os.path.abspath(path_to_file)
     # result = []
+    if not os.path.isfile(path_to_file):
+        return
     if not (path_to_file.endswith(".tsx") or path_to_file.endswith(".ts") or path_to_file.endswith(".js")):
         return
     with lock:
