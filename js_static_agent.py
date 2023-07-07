@@ -188,11 +188,12 @@ def findFileName(importStr, pwd):
         flist = glob.glob("**" + element + "*", recursive=True, root_dir=pwd)
     final_list = []
     for file in flist:
-        if "node_module" not in file:
-            if abs_path:
-                final_list.append(cwd + "/" + file)
-            else: 
-                final_list.append(pwd + "/" + file)
+        if os.path.isfile(file):
+            if "node_module" not in file:
+                if abs_path:
+                    final_list.append(cwd + "/" + file)
+                else: 
+                    final_list.append(pwd + "/" + file)
 
     return final_list
 
