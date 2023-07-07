@@ -5,7 +5,7 @@ import threading
 import time
 
 globs = ["**/*.test.tsx", "**/*.test.ts"]
-# globs = ["src/modules/33-auth-settings/components/Subscription/BillingInfo/__test__/PaymentMethod.test.tsx"]
+# globs = ["src/modules/70-pipeline/components/HarnessCopilot/__tests__/HarnessCopilot.test.tsx"]
 exclude_list = ["react", "moment"]
 glob_cache = {}
 # globs = ["pandas/testing.py"]
@@ -171,8 +171,16 @@ def findFileName(importStr, pwd):
     abs_path = False
     element = splits[-1]
     if count != 0:
-        pwd = "/".join(pwd.split("/")[0:-count])
+        modified_count = count
         element =  "/".join(splits[count:])
+        for dir_item in reversed(pwd.split("/")):
+            if not dir_item.startswith("__"):
+                modified_count = modified_count - 1
+            else:
+                count = count + 1
+            if modified_count <= 0:
+                break
+        pwd = "/".join(pwd.split("/")[0:-count])
     elif importStr.startswith("./"):
         importStr = importStr[2:]
     elif not importStr.startswith("/"):
