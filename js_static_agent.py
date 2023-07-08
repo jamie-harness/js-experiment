@@ -149,10 +149,9 @@ def recursive_find_test(path_to_file):
 
 def findFileName(importStr, pwd):
     global glob_cache
-    # print("//")
-    # print(importStr)
     importStr = importStr.strip("'")
     pwd = os.path.dirname(os.path.realpath(pwd))
+    cur_file_pwd = pwd
     flist = []
     if importStr.startswith("@"):
         path = importStr.strip("@")
@@ -166,15 +165,15 @@ def findFileName(importStr, pwd):
         if split == "..":
             count = count + 1
 
-
     abs_path = False
     full_name = False
     element = splits[-1]
     if count != 0:
-        modified_count = count
         element =  "/".join(splits[count:])
+        abs_path = False
         pwd = "/".join(pwd.split("/")[0:- (count+1)])
     elif importStr.startswith("./"):
+        abs_path = False
         importStr = importStr[2:]
     elif not importStr.startswith("/"):
         abs_path = True
@@ -189,21 +188,23 @@ def findFileName(importStr, pwd):
                 flist = glob_cache[importStr]
     else:
         full_dir = os.path.join(pwd, element)
-        if (os.path.isdir(full_dir)):
+        if False and (os.path.isdir(full_dir)):
             flist = glob.glob(full_dir + "/*")
             full_name = True
         else:
+            pwd = "/".join(cur_file_pwd.split("/")[0:- count])
             flist = glob.glob("**" + element + "*", recursive=True, root_dir=pwd)
     final_list = []
     for file in flist:
+        if abs_path:
+            file = cwd + "/" + file
+        elif full_name:
+            continue
+        else: 
+            file = pwd + "/" + file
         if os.path.isfile(file):
             if "node_module" not in file:
-                if abs_path:
-                    final_list.append(cwd + "/" + file)
-                elif full_name:
-                    final_list.append(file)
-                else: 
-                    final_list.append(pwd + "/" + file)
+                final_list.append(file)
 
     return final_list
 
