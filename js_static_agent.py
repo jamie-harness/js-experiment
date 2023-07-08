@@ -4,8 +4,8 @@ import subprocess
 import threading
 import time
 
-# globs = ["**/*.test.tsx", "**/*.test.ts"]
-globs = ["src/modules/70-pipeline/components/HarnessCopilot/__tests__/HarnessCopilot.test.tsx"]
+globs = ["**/*.test.tsx", "**/*.test.ts"]
+# globs = ["src/modules/70-pipeline/components/HarnessCopilot/__tests__/HarnessCopilot.test.tsx"]
 exclude_list = ["react", "moment"]
 glob_cache = {}
 # globs = ["pandas/testing.py"]
