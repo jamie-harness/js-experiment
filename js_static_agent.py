@@ -36,6 +36,8 @@ def DFS(path_to_file):
         return
     if not (path_to_file.endswith(".tsx") or path_to_file.endswith(".ts") or path_to_file.endswith(".js")):
         return
+    if "node_modules" in path_to_file:
+        return
     with lock:
         if path_to_file in visited or path_to_file == "":
             return
