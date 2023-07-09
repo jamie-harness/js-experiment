@@ -183,7 +183,7 @@ def findFileName(importStr, pwd):
     if abs_path:
         if importStr not in exclude_list:
             if importStr not in glob_cache:
-                flist = glob.glob("**/" + importStr + "*", recursive=True, root_dir=cwd)
+                flist = glob.glob("**/" + importStr + "/*", root_dir=cwd)
                 with lock:
                     glob_cache[importStr] = flist
             else:
@@ -195,7 +195,7 @@ def findFileName(importStr, pwd):
             full_name = True
         else:
             pwd = "/".join(cur_file_pwd.split("/")[0:- count])
-            flist = glob.glob("**" + element + "*", recursive=True, root_dir=pwd)
+            flist = glob.glob("**" + element + "*", root_dir=pwd)
     final_list = []
     for file in flist:
         if abs_path:
@@ -207,7 +207,6 @@ def findFileName(importStr, pwd):
         if os.path.isfile(file):
             if "node_module" not in file:
                 final_list.append(file)
-
     return final_list
 
 startts = time.time()
