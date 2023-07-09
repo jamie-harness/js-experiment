@@ -157,7 +157,7 @@ def findFileName(importStr, pwd):
     flist = []
     if importStr.startswith("@"):
         path = importStr.strip("@")
-        flist = glob.glob("**" + path + "*", recursive=True)
+        flist = glob.glob("**" + path + "*")
         return flist
     if importStr == "": 
         return []
