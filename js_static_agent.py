@@ -272,6 +272,8 @@ selection = []
 for change in res:
     change = os.path.abspath(change)
     results = recursive_find_test(change)
+    if change.endswith("test.tsx") or change.endswith("test.ts"):
+        selection.append(change)
     print(f"{change}: {results}")
     for result in results:
         if result.endswith("test.tsx") or result.endswith("test.ts"):
